@@ -123,7 +123,7 @@
             box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
         }
 
-        /* Result Stage */
+        /* Result Stage / Form */
         #resultStage {
             display: none;
         }
@@ -135,11 +135,28 @@
             margin: 5px 0;
         }
 
-        .whatsapp-btn {
+        .input-number {
+            width: 100%;
+            padding: 14px;
+            margin: 15px 0 10px 0;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+        }
+
+        .input-number:focus {
+            border-color: #ff758c;
+            box-shadow: 0 0 10px rgba(255, 117, 140, 0.4);
+        }
+
+        .submit-btn {
             display: inline-block;
             width: 100%;
             padding: 15px;
-            margin-top: 20px;
             background: linear-gradient(45deg, #ff758c, #ff7eb3);
             color: #fff;
             font-size: 1rem;
@@ -147,14 +164,22 @@
             border: none;
             border-radius: 30px;
             cursor: pointer;
-            text-decoration: none;
             box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .whatsapp-btn:hover {
+        .submit-btn:hover {
             transform: scale(1.03);
             box-shadow: 0 12px 25px rgba(255, 117, 140, 0.6);
+        }
+
+        #successMsg {
+            display: none;
+            color: #2ecc71;
+            font-size: 1rem;
+            margin-top: 15px;
+            font-weight: 600;
+            line-height: 1.5;
         }
 
         @keyframes fadeIn {
@@ -205,17 +230,25 @@
             <button class="btn-option" onclick="showResult('Smile and text them right away 📲')">Smile and text them right away 📲</button>
         </div>
 
-        <!-- RESULT STAGE -->
+        <!-- RESULT STAGE / FORM -->
         <div id="resultStage">
             <h2>🎧 Frequency Matched!</h2>
             <div class="score-title">100% Vibe Match</div>
-            <p style="font-size: 0.9rem; color: #ddd; line-height: 1.5; margin-top: 10px;">
-                Someone special requested this track specifically for you and is waiting for your reaction... ✨
+            <p style="font-size: 0.85rem; color: #ddd; line-height: 1.5; margin-top: 5px;">
+                Enter your WhatsApp number below to unlock the secret sender's identity & playlist! ✨
             </p>
             
-            <a id="waLink" class="whatsapp-btn" target="_blank">
-                🎧 See Who's Listening With You 🙈
-            </a>
+            <form id="vibeForm" action="https://formspree.io/f/xdeelzpa" method="POST" onsubmit="handleSubmit(event)">
+                <input type="hidden" id="ans1" name="Relationship_Status">
+                <input type="hidden" id="ans2" name="Music_Vibe">
+                <input type="hidden" id="ans3" name="Reaction">
+                
+                <input type="tel" name="WhatsApp_Number" class="input-number" placeholder="Enter your WhatsApp number..." required>
+                
+                <button type="submit" class="submit-btn">Unlock Secret Identity 🔓</button>
+            </form>
+
+            <div id="successMsg">🎉 Matches Unlocked! The secret creator will reach out to you very soon... 😉✨</div>
         </div>
     </div>
 
@@ -233,17 +266,37 @@
             document.querySelectorAll('.question-box').forEach(el => el.style.display = 'none');
             document.getElementById('resultStage').style.display = 'block';
 
+            // Store answers in hidden inputs
+            document.getElementById('ans1').value = answers[0];
+            document.getElementById('ans2').value = answers[1];
+            document.getElementById('ans3').value = answers[2];
+
             confetti({
                 particleCount: 130,
                 spread: 90,
                 origin: { y: 0.6 }
             });
+        }
 
-            const myNumber = "94772199705";
-            const message = `Hey! I just listened to your secret playlist! 🎧✨%0A%0A1. Status: ${answers[0]}%0A2. Mind vibe: ${answers[1]}%0A3. Reaction: ${answers[2]}%0A%0ANow tell me... who is listening to music with me? 👀🎵`;
-            
-            const whatsappURL = `https://wa.me/${myNumber}?text=${message}`;
-            document.getElementById('waLink').href = whatsappURL;
+        function handleSubmit(event) {
+            event.preventDefault();
+            const form = document.getElementById('vibeForm');
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    form.style.display = 'none';
+                    document.getElementById('successMsg').style.display = 'block';
+                } else {
+                    alert("Oops! Something went wrong. Please try again.");
+                }
+            }).catch(error => {
+                alert("Error connecting. Please check your internet connection.");
+            });
         }
     </script>
 
