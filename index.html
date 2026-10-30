@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Secret Vibe & Music Player 🎧✨</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #1a1a2e 0%, #0f0c1b 100%);
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            padding: 30px 25px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            animation: fadeIn 0.8s ease;
+        }
+
+        /* Vinyl Record Animation */
+        .vinyl-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px auto;
+        }
+
+        .vinyl {
+            width: 100%;
+            height: 100%;
+            background: #111;
+            border-radius: 50%;
+            border: 6px solid #ff758c;
+            box-shadow: 0 0 20px rgba(255, 117, 140, 0.4);
+            position: relative;
+            animation: spin 4s linear infinite;
+        }
+
+        .vinyl::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 35px;
+            height: 35px;
+            background: #ff758c;
+            border-radius: 50%;
+            border: 3px solid #fff;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #ff758c;
+            margin-bottom: 8px;
+        }
+
+        p.subtitle {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        .question-box {
+            display: none;
+        }
+
+        .question-box.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        .q-title {
+            font-size: 1rem;
+            margin-bottom: 18px;
+            color: #f1c40f;
+            line-height: 1.4;
+        }
+
+        .btn-option {
+            width: 100%;
+            padding: 12px 18px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: #fff;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-option:hover {
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            border-color: transparent;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 117, 140, 0.4);
+        }
+
+        /* Result Stage */
+        #resultStage {
+            display: none;
+        }
+
+        .score-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #ff758c;
+            margin: 5px 0;
+        }
+
+        .whatsapp-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(255, 117, 140, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .whatsapp-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 25px rgba(255, 117, 140, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Vinyl Record Icon -->
+        <div class="vinyl-container">
+            <div class="vinyl"></div>
+        </div>
+
+        <!-- QUESTION 1 -->
+        <div class="question-box active" id="q1">
+            <h2>🎵 Lofi Vibe Check</h2>
+            <p class="subtitle">A secret song was requested for you...</p>
+            <p class="q-title">1. What's your current relationship status? 🤫</p>
+            <button class="btn-option" onclick="nextQuestion(2, 'Single & waiting for someone special 🌸')">Single & waiting for someone special 🌸</button>
+            <button class="btn-option" onclick="nextQuestion(2, 'Taken / In a relationship 💖')">Taken / In a relationship 💖</button>
+            <button class="btn-option" onclick="nextQuestion(2, 'It\'s complicated 🙈')">It's complicated 🙈</button>
+        </div>
+
+        <!-- QUESTION 2 -->
+        <div class="question-box" id="q2">
+            <h2>🎵 Music & Mood</h2>
+            <p class="subtitle">Tuning into your frequency...</p>
+            <p class="q-title">2. When you listen to slow songs, what kind of thoughts come to your mind? 🎧</p>
+            <button class="btn-option" onclick="nextQuestion(3, 'Thinking of someone who cares about me ✨')">Thinking of someone who cares about me ✨</button>
+            <button class="btn-option" onclick="nextQuestion(3, 'Just enjoying the calm night vibe 🌙')">Just enjoying the calm night vibe 🌙</button>
+            <button class="btn-option" onclick="nextQuestion(3, 'Wondering who is listening to the same song 🎶')">Wondering who is listening to the same song 🎶</button>
+        </div>
+
+        <!-- QUESTION 3 -->
+        <div class="question-box" id="q3">
+            <h2>🎵 Almost There</h2>
+            <p class="subtitle">Frequency matched!</p>
+            <p class="q-title">3. If someone dedicated a secret playlist just for you, what would you do? 👀</p>
+            <button class="btn-option" onclick="showResult('Ask them why they are so sweet to me 🙈')">Ask them why they are so sweet to me 🙈</button>
+            <button class="btn-option" onclick="showResult('Smile and text them right away 📲')">Smile and text them right away 📲</button>
+        </div>
+
+        <!-- RESULT STAGE -->
+        <div id="resultStage">
+            <h2>🎧 Frequency Matched!</h2>
+            <div class="score-title">100% Vibe Match</div>
+            <p style="font-size: 0.9rem; color: #ddd; line-height: 1.5; margin-top: 10px;">
+                Someone special requested this track specifically for you and is waiting for your reaction... ✨
+            </p>
+            
+            <a id="waLink" class="whatsapp-btn" target="_blank">
+                🎧 See Who's Listening With You 🙈
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let answers = [];
+
+        function nextQuestion(nextId, answer) {
+            answers.push(answer);
+            document.querySelectorAll('.question-box').forEach(el => el.classList.remove('active'));
+            document.getElementById('q' + nextId).classList.add('active');
+        }
+
+        function showResult(lastAnswer) {
+            answers.push(lastAnswer);
+            document.querySelectorAll('.question-box').forEach(el => el.style.display = 'none');
+            document.getElementById('resultStage').style.display = 'block';
+
+            confetti({
+                particleCount: 130,
+                spread: 90,
+                origin: { y: 0.6 }
+            });
+
+            const myNumber = "94772199705";
+            const message = `Hey! I just listened to your secret playlist! 🎧✨%0A%0A1. Status: ${answers[0]}%0A2. Mind vibe: ${answers[1]}%0A3. Reaction: ${answers[2]}%0A%0ANow tell me... who is listening to music with me? 👀🎵`;
+            
+            const whatsappURL = `https://wa.me/${myNumber}?text=${message}`;
+            document.getElementById('waLink').href = whatsappURL;
+        }
+    </script>
+
+</body>
+</html>
